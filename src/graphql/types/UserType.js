@@ -1,12 +1,12 @@
 import {
   GraphQLObjectType,
-  GraphQLID,
   GraphQLString,
   GraphQLInt,
   GraphQLNonNull,
   GraphQLList,
   GraphQLFloat,
   GraphQLEnumType,
+  GraphQLInputObjectType,
 } from 'graphql';
 import { GraphQLObjectID } from 'graphql-scalars';
 
@@ -32,6 +32,39 @@ const TransactionType = new GraphQLObjectType({
     price: { type: GraphQLFloat },
     quantity: { type: GraphQLInt },
     status: { type: TransactionStatusEnumType },
+  }),
+});
+
+// const TransactionInputType = new GraphQLObjectType({
+//   name: 'TransactionInputType',
+//   fields: () => ({
+//     productId: { type: GraphQLObjectID },
+//     price: { type: GraphQLFloat },
+//     quantity: { type: GraphQLInt },
+//     status: { type: TransactionStatusEnumType },
+//   }),
+// });
+
+const TransactionInputType = new GraphQLInputObjectType({
+  name: 'TransactionsInputType',
+  fields: () => ({
+    productId: { type: GraphQLObjectID },
+    price: { type: GraphQLFloat },
+    quantity: { type: GraphQLInt },
+    status: { type: TransactionStatusEnumType },
+  }),
+});
+
+export const UserInputType = new GraphQLInputObjectType({
+  name: 'UserInputType',
+  fields: () => ({
+    _id: { type: new GraphQLNonNull(GraphQLObjectID) },
+    email: { type: GraphQLString },
+    password: { type: GraphQLString },
+    companyName: { type: GraphQLString },
+    transactions: {
+      type: new GraphQLList(TransactionInputType),
+    },
   }),
 });
 

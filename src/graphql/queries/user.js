@@ -1,6 +1,7 @@
-import { GraphQLList, GraphQLID } from 'graphql';
+import { GraphQLList } from 'graphql';
 import User from '../../models/User.js';
 import UserType from '../types/UserType.js';
+import { GraphQLObjectID } from 'graphql-scalars';
 
 const userQueries = {
   users: {
@@ -13,10 +14,10 @@ const userQueries = {
   user: {
     type: UserType,
     args: {
-      id: { type: GraphQLID },
+      _id: { type: GraphQLObjectID },
     },
-    resolve: async (_, { id }) => {
-      return await User.findById(id);
+    resolve: async (_, { _id }) => {
+      return await User.findById(_id);
     },
   },
 };
