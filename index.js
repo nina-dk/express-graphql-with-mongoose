@@ -1,26 +1,59 @@
-const express = require('express');
-const graphQLHttp = require('express-graphql');
-const schema = require('./src/schema');
-const mongoose = require('mongoose');
-const database = require('./config/database');
-const port = 3000;
+import express from 'express';
+import { createHandler } from 'graphql-http/lib/use/express';
+import mongoose from 'mongoose';
+import cors from 'cors';
 
-mongoose.Promise = global.Promise;
-mongoose.connect(database.mongoConnectionString,{ useNewUrlParser: true },(err) => {
-    if(err) {
-        console.log(err);
-    } else {
-        console.log('db connection is okay');
-    }
-});
+import schema from './src/graphql/schema.js';
+import dbconfig from './config.js';
 
 const app = express();
+const port = 3000;
 
-app.use('/', graphQLHttp({
-    schema: schema,
-    graphiql: true
-}));
+/* MongoDB connection */
+try {
+  await mongoose.connect(dbconfig.mongoConnectionString);
+  console.log('✅ Database connected');
+} catch (error) {
+  console.error('❌ MongoDB connection error:', error);
+  process.exit(1);
+}
 
+// app.post(
+//   '/graphql',
+//   createHandler({
+//     schema,
+//   }),
+// );
+
+// /* GraphQL endpoint */
+// app.use(
+//   '/graphql',
+//   createHandler({
+//     schema,
+//     graphiql: true,
+//   }),
+// );
+
+app.use(cors());
+
+/* GraphQL POST (queries & mutations) */
+app.post(
+  '/graphql',
+  createHandler({
+    schema,
+  }),
+);
+
+/* GraphiQL UI (GET request) */
+app.get(
+  '/graphql',
+  createHandler({
+    schema,
+    graphiql: true,
+  }),
+);
+
+/* Start server */
 app.listen(port, () => {
-    console.log('server running at port', port)
+  console.log(`🚀 Server running at http://localhost:${port}/graphql`);
 });
