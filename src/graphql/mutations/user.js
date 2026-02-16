@@ -24,7 +24,7 @@ const userMutations = {
       userInfo: { type: UserInputType },
     },
     resolve: async (_, { userInfo: { _id, ...deets } }) => {
-      return await User.findByIdAndUpdate(_id, deets, { new: true });
+      return await User.findByIdAndUpdate(_id, deets, { returnDocument: 'after' });
     },
   },
 

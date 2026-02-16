@@ -26,7 +26,7 @@ const productMutations = {
       return await Product.findByIdAndUpdate(
         _id,
         { $inc: { timesBought: 1 } },
-        { new: true },
+        { returnDocument: 'after' },
       );
     },
   },

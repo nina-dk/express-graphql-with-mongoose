@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
         quantity: Number,
         status: {
           type: String,
-          enum: ['PAID', 'PENDING', 'CANCEL'],
+          enum: ['paid', 'pending', 'cancel'],
         },
       },
     ],
