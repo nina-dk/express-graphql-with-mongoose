@@ -1,3 +1,4 @@
+import Product from '../src/models/Product';
 import User from '../src/models/User';
 
 export const userObjs = [
@@ -59,12 +60,40 @@ export const userObjs = [
   },
 ];
 
+export const productObjs = [
+  {
+    title: 'Burger',
+    description: 'Cheeseburger with pickles, bacon, tomato & onion.',
+    price: 8.9,
+  },
+  {
+    title: 'Fries',
+    price: 3.89,
+    timesBought: 59,
+  },
+  {
+    title: 'Onion rings',
+    description: 'Onion rings',
+    price: 5.9,
+    timesBought: 25,
+  },
+];
+
 export const addUser = async userData => {
   const user = new User(userData);
-  return await user.save();
+  return user.save();
 };
 
 export const addUsers = async users => {
   const userPromises = users.map(addUser);
   return await Promise.all(userPromises);
+};
+
+export const addProducts = async products => {
+  const pPromises = products.map(async p => {
+    const product = new Product(p);
+    return product.save();
+  });
+
+  return await Promise.all(pPromises);
 };
