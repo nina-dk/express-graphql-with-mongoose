@@ -21,7 +21,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    password: String,
+    password: {
+      type: String,
+      required: true,
+    },
     companyName: String,
     transactions: [
       {
@@ -30,7 +33,7 @@ const userSchema = new mongoose.Schema(
         quantity: Number,
         status: {
           type: String,
-          enum: ['PAID', 'PENDING', 'CANCEL'],
+          enum: ['paid', 'pending', 'cancel'],
         },
       },
     ],

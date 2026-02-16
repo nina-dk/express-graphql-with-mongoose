@@ -1,15 +1,16 @@
-import { GraphQLString, GraphQLInt, GraphQLNonNull } from 'graphql';
+import { GraphQLString, GraphQLNonNull } from 'graphql';
 
 import User from '../../models/User.js';
-import UserType from '../types/UserType.js';
+import UserType, { UserInputType } from '../types/UserType.js';
+import { GraphQLObjectID } from 'graphql-scalars';
 
 const userMutations = {
-  createUser: {
+  addUser: {
     type: UserType,
     args: {
-      name: { type: new GraphQLNonNull(GraphQLString) },
       email: { type: new GraphQLNonNull(GraphQLString) },
-      age: { type: GraphQLInt },
+      password: { type: new GraphQLNonNull(GraphQLString) },
+      companyName: { type: GraphQLString },
     },
     resolve: async (_, args) => {
       const user = new User(args);
@@ -17,13 +18,23 @@ const userMutations = {
     },
   },
 
-  deleteUser: {
+  updateUser: {
     type: UserType,
     args: {
-      id: { type: new GraphQLNonNull(GraphQLString) },
+      userInfo: { type: UserInputType },
     },
-    resolve: async (_, { id }) => {
-      return await User.findByIdAndDelete(id);
+    resolve: async (_, { userInfo: { _id, ...deets } }) => {
+      return await User.findByIdAndUpdate(_id, deets, { returnDocument: 'after' });
+    },
+  },
+
+  removeUser: {
+    type: UserType,
+    args: {
+      _id: { type: new GraphQLNonNull(GraphQLObjectID) },
+    },
+    resolve: async (_, { _id }) => {
+      return await User.findByIdAndDelete(_id);
     },
   },
 };
