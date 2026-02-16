@@ -35,16 +35,6 @@ const TransactionType = new GraphQLObjectType({
   }),
 });
 
-// const TransactionInputType = new GraphQLObjectType({
-//   name: 'TransactionInputType',
-//   fields: () => ({
-//     productId: { type: GraphQLObjectID },
-//     price: { type: GraphQLFloat },
-//     quantity: { type: GraphQLInt },
-//     status: { type: TransactionStatusEnumType },
-//   }),
-// });
-
 const TransactionInputType = new GraphQLInputObjectType({
   name: 'TransactionsInputType',
   fields: () => ({

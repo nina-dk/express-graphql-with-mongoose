@@ -31,7 +31,7 @@ const userMutations = {
   removeUser: {
     type: UserType,
     args: {
-      _id: { type: new GraphQLNonNull(GraphQLString) },
+      _id: { type: new GraphQLNonNull(GraphQLObjectID) },
     },
     resolve: async (_, { _id }) => {
       return await User.findByIdAndDelete(_id);
