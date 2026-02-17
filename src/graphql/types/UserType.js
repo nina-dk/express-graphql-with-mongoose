@@ -9,6 +9,8 @@ import {
   GraphQLInputObjectType,
 } from 'graphql';
 import { GraphQLObjectID } from 'graphql-scalars';
+import Product from '../../models/Product.js';
+import { ProductType } from './ProductType.js';
 
 const TransactionStatusEnumType = new GraphQLEnumType({
   name: 'TransactionStatusEnum',
@@ -29,6 +31,10 @@ const TransactionType = new GraphQLObjectType({
   name: 'Transaction',
   fields: () => ({
     productId: { type: GraphQLObjectID },
+    product: {
+      type: ProductType,
+      resolve: (transaction) => Product.findById(transaction.productId),
+    },
     price: { type: GraphQLFloat },
     quantity: { type: GraphQLInt },
     status: { type: TransactionStatusEnumType },

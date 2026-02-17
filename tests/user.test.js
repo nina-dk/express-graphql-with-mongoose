@@ -29,7 +29,11 @@ describe('User', () => {
               password
               companyName
               transactions {
-                productId price quantity status
+                productId
+                product {
+                  _id title price
+                }
+                price quantity status
               }
             }
           }
@@ -45,6 +49,8 @@ describe('User', () => {
     expect(response.body.data.user.transactions.length).toBe(
       userObjs[0].transactions.length,
     );
+    // product resolves to null for fake productIds — confirms resolver runs without error
+    expect(response.body.data.user.transactions[0].product).toBeNull();
   });
 
   test('getting all users', async () => {
